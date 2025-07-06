@@ -1,10 +1,8 @@
-import { calculateInvestmentResults } from "../util/investment.js";
+import { calculateInvestmentResults, formatter } from "../util/investment.js";
 
-export default function Result({ onValueInput }) {
-    const [initialInvestment, annualInvestment, expectedReturn, duration] = onValueInput;
-   const result = calculateInvestmentResults({ initialInvestment, annualInvestment, expectedReturn, duration });
-
-
+export default function Result({ onValueInput: results }) {
+    console.log(results);
+    const initialInvestment = results[0].valueEndOfYear - results[0].interest - results[0].annualInvestment;
     return (
         <table id={"result"}>
             <thead>
@@ -17,13 +15,20 @@ export default function Result({ onValueInput }) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td>$16,725</td>
-                    <td>$825</td>
-                    <td>$825</td>
-                    <td>15,900</td>
-                </tr>
+                {results.map(result => {
+                    const totalInterest = result.valueEndOfYear - result.annualInvestment * result.year - initialInvestment;
+                    const totalAmountInterest = result.valueEndOfYear - totalInterest
+
+                    return (
+                        <tr key={result.year}>
+                            <td>{result.year}</td>
+                            <td>{formatter.format(result.valueEndOfYear)}</td>
+                            <td>{formatter.format(result.interest)}</td>
+                            <td>{formatter.format(totalInterest)}</td>
+                            <td>{formatter.format(totalAmountInterest)}</td>
+                        </tr>
+                    );
+                })}
             </tbody>
         </table>
     );

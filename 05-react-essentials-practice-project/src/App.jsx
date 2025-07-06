@@ -4,11 +4,19 @@ import { useState } from "react";
 import { calculateInvestmentResults } from "./util/investment.js";
 
 function App() {
-    const [initialInvestment, setInitialInvestment] = useState(0);
-    const [annualInvestment, setAnnualInvestment] = useState(0);
-    const [expectedReturn, setExpectedReturn] = useState(0);
-    const [duration, setDuration] = useState(0);
+    const [userInput, setUserInput] = useState({
+        initialInvestment: 10000,
+        annualInvestment: 1200,
+        expectedReturn: 6,
+        duration: 10,
+    });
 
+    const results = calculateInvestmentResults(userInput);
+    function handleTotalInvestment(inputName, inputValue) {
+        setUserInput(prevState => {
+            return { ...prevState, [inputName]: inputValue };
+        });
+    }
 
     return (
         <>
@@ -16,29 +24,29 @@ function App() {
                 <div className={"input-group"}>
                     <LabeledNumberInput
                         labelText={"INITIAL INVESTMENT"}
-                        value={initialInvestment}
-                        onChange={event => setInitialInvestment(event.target.value)}
+                        value={userInput.initialInvestment}
+                        onChange={event => handleTotalInvestment("initialInvestment", event.target.value)}
                     />
                     <LabeledNumberInput
                         labelText={"ANNUAL INVESTMENT"}
-                        value={annualInvestment}
-                        onChange={event => setAnnualInvestment(event.target.value)}
+                        value={userInput.annualInvestment}
+                        onChange={event => handleTotalInvestment("annualInvestment", event.target.value)}
                     />
                 </div>
                 <div className={"input-group"}>
                     <LabeledNumberInput
                         labelText={"EXPECTED RETURNS"}
-                        value={expectedReturn}
-                        onChange={event => setExpectedReturn(event.target.value)}
+                        value={userInput.expectedReturn}
+                        onChange={event => handleTotalInvestment("expectedReturn", event.target.value)}
                     />
                     <LabeledNumberInput
                         labelText={"DURATION"}
-                        value={duration}
-                        onChange={event => setDuration(event.target.value)}
+                        value={userInput.duration}
+                        onChange={event => handleTotalInvestment("duration", event.target.value)}
                     />
                 </div>
             </section>
-            <Result onValueInput={[initialInvestment, annualInvestment, expectedReturn, duration ]} />
+            {results.length > 0 && <Result onValueInput={results} />}
         </>
     );
 }
