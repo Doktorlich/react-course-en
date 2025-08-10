@@ -1,0 +1,36 @@
+{
+    "name": "01-api-for-the-blog",
+    "version": "1.0.0",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon app.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Doktorlich"
+    },
+    "keywords": [
+        ""
+    ],
+    "author": "Sergey Manukhin",
+    "license": "ISC",
+    "bugs": {
+        "url": ""
+    },
+    "homepage": "",
+    "description": "",
+    "dependencies": {
+        "connect-mongodb-session": "^5.0.0",
+        "date-fns": "^4.1.0",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "express-session": "^1.18.1",
+        "express-validator": "^7.2.1",
+        "mongoose": "^8.15.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.10"
+    }
+}
