@@ -1,23 +1,25 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import cors from "cors";
 import mongoose from "mongoose";
 import routeIndex from "./routes/index.route.js";
-const app = express();
+const server = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-});
+server.use(
+    cors({
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allowHeaders: ["Content-Type", "Authorization"],
+    }),
+);
 
-app.use(routeIndex);
+server.use(routeIndex);
 
-app.use((error, req, res, next) => {
+server.use((error, req, res, next) => {
     console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
@@ -28,7 +30,7 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(`${process.env.MONGODB_URI}`)
     .then(() => {
-        app.listen(process.env.PORT || 3000, error => {
+        server.listen(process.env.PORT || 3000, error => {
             if (error) {
                 return error;
             }

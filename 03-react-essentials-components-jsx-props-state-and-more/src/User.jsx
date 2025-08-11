@@ -1,6 +1,6 @@
 function User(props){
   return (
-    <div id="app">
+    <div id="server">
       <h1>{props.mainTitle}</h1>
       <p>Welcome on board of this course! You got this</p>
       <div id="user">

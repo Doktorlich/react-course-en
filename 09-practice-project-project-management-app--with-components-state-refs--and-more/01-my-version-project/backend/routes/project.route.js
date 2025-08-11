@@ -1,17 +1,19 @@
 import { Router } from "express";
 import { projectController } from "../controllers/project.controller.js";
+import {validator} from "../middleware/validation.middleware.js";
 
 const router = Router();
-//начальная страница
+const [validationTitle,validationDescription,validationDueDate] = [validator.validationProject.title,validator.validationProject.description,validator.validationProject.dueDate]
+//начальная страница +
 router.get("/", projectController.getHome);
-//страница создания нового проекта
+//страница создания нового проекта+
 router.get("/create-project", projectController.getCreateProject);
-// пост запрос на создание нового проекта
-router.post("/create-project/create", projectController.postCreateProject);
-// get запрос для просмотра конкретного проекта
+// пост запрос на создание нового проекта+
+router.post("/create-project/create",validationTitle,validationDescription,validationDueDate, projectController.postCreateProject);
+// get запрос для просмотра конкретного проекта+
 router.get("/project/:project", projectController.getProject);
 
-// пост запрос на удаление проекта
+// пост запрос на удаление проекта+
 router.delete("/project/:project/delete", projectController.deleteProject);
 // // открытие страницы изменения для изменения данных
 // router.get("/:project/update-project", projectController.getUpdateProject);
@@ -20,7 +22,7 @@ router.delete("/project/:project/delete", projectController.deleteProject);
 // router.patch("/:project/update-project", projectController.putUpdateProject);
 
 //пост запрос на создание задачи
-router.post("/project/:project/create-task", projectController.postCreateTask);
+router.post("/project/:project/create-task",validator.validationTask.text, projectController.postCreateTask);
 // пост запрос на удаление задачи
 router.delete("/project/:project/:task/delete-task", projectController.deleteTask);
 // //запрос на обновление задачи

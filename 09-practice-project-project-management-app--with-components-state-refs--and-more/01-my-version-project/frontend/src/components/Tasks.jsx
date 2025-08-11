@@ -2,6 +2,7 @@ import NewTask from "./NewTask.jsx";
 import { useState } from "react";
 
 export default function Tasks({ onAdd, onDelete, tasks }) {
+    console.log("tasks component", tasks);
     return (
         <section>
             <h2 className={"text- font-bold text-stone-700 mb-4"}>Tasks</h2>
@@ -12,9 +13,9 @@ export default function Tasks({ onAdd, onDelete, tasks }) {
                 <ul className={"p-4 mt-8 rounded-md bg-stone-100"}>
                     {tasks.map(task => {
                         return (
-                            <li key={task.id} className={"flex justify-between my-4"}>
+                            <li key={task._id} className={"flex justify-between my-4"}>
                                 <span>{task.text}</span>
-                                <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(task.id)}>
+                                <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(task._id)}>
                                     Clear
                                 </button>
                             </li>

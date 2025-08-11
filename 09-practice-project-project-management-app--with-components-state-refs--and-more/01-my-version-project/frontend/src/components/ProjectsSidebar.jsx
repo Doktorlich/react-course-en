@@ -1,4 +1,5 @@
 import Button from "./Button.jsx";
+import { Link } from "react-router-dom";
 // ------------------
 export default function ProjectsSidebar({ onStartAddProject, projectsState, onSelectProject, selectedProjectId }) {
     return (
@@ -9,21 +10,15 @@ export default function ProjectsSidebar({ onStartAddProject, projectsState, onSe
             </div>
             <ul className={"mt-8"}>
                 {projectsState.projects.map(project => {
-                    let cssClasses = "w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 "
-                    // ------------------
-                    if (project.id === selectedProjectId){
-                        cssClasses += ' bg-stone-800 text-stone-200'
-                    }
-                    else {
-                        cssClasses += ' text-stone-400'
+                    let cssClasses = "w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 ";
+                    if (project._id === selectedProjectId) {
+                        cssClasses += " bg-stone-800 text-stone-200";
+                    } else {
+                        cssClasses += " text-stone-400";
                     }
                     return (
-                        <li key={project.id}>
-                            <button
-                                className={cssClasses}
-                                // ------------------
-                                onClick={() => onSelectProject((project.id))}
-                            >
+                        <li key={project._id}>
+                            <button className={cssClasses} onClick={() => onSelectProject(project._id.toString())}>
                                 {project.title}
                             </button>
                         </li>

@@ -6,16 +6,15 @@ const validationProject = {
     title: [body("title").isLength({ min: 1 }).trim()],
     description: [body("description").isLength({ min: 1 })],
     dueDate: [
-        body("dueDate")
-            .isDate({ format: "MM-DD-YYYY" })
-            .custom(value => {
-                const inputDate = new Date(value);
-                const today = new Date();
-                if (inputDate > today) {
-                    throw new Error("Дата не может быть в будущем");
-                }
-                return true;
-            }),
+        body("dueDate"),
+        // .custom(value => {
+        //     const inputDate = new Date(value);
+        //     const today = new Date();
+        //     if (inputDate > today) {
+        //         throw new Error("Дата не может быть в будущем");
+        //     }
+        //     return true;
+        // }),
     ],
 };
 const validationTask = {

@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 // /
 async function getHome(req, res, next) {
     try {
-        const projects = await Project.find();
+        const projects = await ProjectSchema.find().populate("tasks","_id text");
         res.status(200).json({
             message: "Successfully got to the start page.",
             projects: projects,
@@ -72,12 +72,14 @@ async function getProject(req, res, next) {
             error.statusCode = 400;
             throw error;
         }
-        const project = await ProjectSchema.findById(projectId);
+        const project = await ProjectSchema.findById(projectId).populate("tasks","_id text");
         if (!project) {
             const error = new Error("Project not found.");
             error.statusCode = 404;
             throw error;
         }
+
+        const task = await TaskSchema
 
         res.status(200).json({
             message: "Project target page open",
@@ -151,7 +153,7 @@ async function postCreateTask(req, res, next) {
         await project.save();
         return res.status(201).json({
             message: "Task successfully created",
-            project: project,
+            task: newTask,
         });
     } catch (error) {
         if (!error.statusCode) {
