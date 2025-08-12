@@ -14,7 +14,7 @@ function App() {
     });
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/`, {
+        fetch(`${API_BASE_URL}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })
@@ -54,7 +54,7 @@ function App() {
     // работа с task
     function handleAddTask(text) {
         console.log("projectsState.selectedProjectId", projectsState.selectedProjectId);
-        fetch(`${API_BASE_URL}/project/${projectsState.selectedProjectId}/create-task`, {
+        fetch(`${API_BASE_URL}project/${projectsState.selectedProjectId}/create-task`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -88,7 +88,7 @@ function App() {
     }
 
     function handleDeleteTask(taskId) {
-        fetch(`${API_BASE_URL}/project/${projectsState.selectedProjectId}/${taskId}/delete-task`, {
+        fetch(`${API_BASE_URL}project/${projectsState.selectedProjectId}/${taskId}/delete-task`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json", // Обязательно для non-simple запросов
@@ -130,7 +130,7 @@ function App() {
             };
         });
         navigate(`/project/${id}`);
-        fetch(`${API_BASE_URL}/project/${id}`, {
+        fetch(`${API_BASE_URL}project/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })
@@ -154,7 +154,7 @@ function App() {
             });
     }
     function handleDeleteProject(id) {
-        fetch(`${API_BASE_URL}/project/${id}/delete`, {
+        fetch(`${API_BASE_URL}project/${id}/delete`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json", // Обязательно для non-simple запросов
@@ -205,7 +205,7 @@ function App() {
     }
 
     function handleAddProject(projectFormData) {
-        fetch(`${API_BASE_URL}/create-project/create`, {
+        fetch(`${API_BASE_URL}create-project/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
