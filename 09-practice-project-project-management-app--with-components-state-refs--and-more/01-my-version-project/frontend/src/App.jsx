@@ -4,10 +4,9 @@ import NoProjectSection from "./components/NoProjectSection.jsx";
 import { Fragment, useEffect, useState } from "react";
 import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-
+const API_BASE_URL = process.env.VITE_API_URL || "http://localhost:8080";
 function App() {
     const navigate = useNavigate();
-    const { projectId } = useParams();
     const [projectsState, setProjectsState] = useState({
         selectedProjectId: undefined,
         projects: [],
@@ -15,7 +14,7 @@ function App() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:8080/", {
+        fetch(`${API_BASE_URL}/`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })
@@ -23,18 +22,15 @@ function App() {
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-                // console.log(response.json());
                 return response.json();
             })
             .then(data => {
-                console.log("data home", data);
                 const allTasks = data.projects.flatMap(project =>
                     project.tasks.map(task => ({
                         ...task,
                         projectId: project._id, // Добавляем projectId к каждой задаче
                     })),
                 );
-                console.log("allTasks", allTasks);
                 return setProjectsState(prevState => {
                     return {
                         ...prevState,
@@ -49,16 +45,16 @@ function App() {
         // navigate("/", { replace: true });
     }, []);
 
-    useEffect(() => {
-        if (projectId) {
-            setProjectsState(prevState => ({ ...prevState, selectedProjectId: projectId }));
-        }
-    }, [projectId]);
+    // useEffect(() => {
+    //     if (projectId) {
+    //         setProjectsState(prevState => ({ ...prevState, selectedProjectId: projectId }));
+    //     }
+    // }, [projectId]);
 
     // работа с task
     function handleAddTask(text) {
         console.log("projectsState.selectedProjectId", projectsState.selectedProjectId);
-        fetch(`http://localhost:8080/project/${projectsState.selectedProjectId}/create-task`, {
+        fetch(`${API_BASE_URL}/project/${projectsState.selectedProjectId}/create-task`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -92,7 +88,7 @@ function App() {
     }
 
     function handleDeleteTask(taskId) {
-        fetch(`http://localhost:8080/project/${projectsState.selectedProjectId}/${taskId}/delete-task`, {
+        fetch(`${API_BASE_URL}/project/${projectsState.selectedProjectId}/${taskId}/delete-task`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json", // Обязательно для non-simple запросов
@@ -134,7 +130,7 @@ function App() {
             };
         });
         navigate(`/project/${id}`);
-        fetch(`http://localhost:8080/project/${id}`, {
+        fetch(`${API_BASE_URL}/project/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })
@@ -149,7 +145,7 @@ function App() {
                 return setProjectsState(prevState => {
                     return {
                         ...prevState,
-                        tasks: [...data.project.tasks],
+                        tasks: [...data.project.tasks].reverse(),
                     };
                 });
             })
@@ -158,7 +154,7 @@ function App() {
             });
     }
     function handleDeleteProject(id) {
-        fetch(`http://localhost:8080/project/${id}/delete`, {
+        fetch(`${API_BASE_URL}/project/${id}/delete`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json", // Обязательно для non-simple запросов
@@ -209,8 +205,7 @@ function App() {
     }
 
     function handleAddProject(projectFormData) {
-        let dataArray;
-        fetch("http://localhost:8080/create-project/create", {
+        fetch(`${API_BASE_URL}/create-project/create`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -252,22 +247,6 @@ function App() {
         });
     }
     const selectedProject = projectsState.projects.find(project => project._id === projectsState.selectedProjectId);
-
-    // let content = (
-    //     <SelectedProject
-    //         project={selectedProject}
-    //         onDelete={handleDeleteProject}
-    //         onAddTask={handleAddTask}
-    //         onDeleteTask={handleDeleteTask}
-    //         tasks={projectsState.tasks.filter(task => task.projectId === projectsState.selectedProjectId)}
-    //     />
-    // );
-    // if (projectsState.selectedProjectId === undefined) {
-    //     content = <NoProjectSection onStartAddProject={handleStartAddProject} />;
-    // } else if (projectsState.selectedProjectId === null) {
-    //     content = <NewProject onAddData={handleAddProject} onReset={handleResetCreateProject} onCancel={handleCancelAddProject} />;
-    // }d
-    console.log("projectsState app", projectsState);
     return (
         <main className="h-screen my-8 flex gap-8">
             <ProjectsSidebar

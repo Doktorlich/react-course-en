@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 // /
 async function getHome(req, res, next) {
     try {
-        const projects = await ProjectSchema.find().populate("tasks","_id text");
+        const projects = await ProjectSchema.find().populate("tasks", "_id text");
         res.status(200).json({
             message: "Successfully got to the start page.",
             projects: projects,
@@ -72,14 +72,14 @@ async function getProject(req, res, next) {
             error.statusCode = 400;
             throw error;
         }
-        const project = await ProjectSchema.findById(projectId).populate("tasks","_id text");
+        const project = await ProjectSchema.findById(projectId).populate("tasks", "_id text");
         if (!project) {
             const error = new Error("Project not found.");
             error.statusCode = 404;
             throw error;
         }
 
-        const task = await TaskSchema
+        const task = await TaskSchema;
 
         res.status(200).json({
             message: "Project target page open",
@@ -101,15 +101,19 @@ async function deleteProject(req, res, next) {
         error.statusCode = 400;
         throw error;
     }
-    const project = await ProjectSchema.findByIdAndDelete(projectId);
-    if (!project) {
-        const error = new Error("Project not found.");
-        error.statusCode = 404;
-        throw error;
-    }
     try {
+        const project = await ProjectSchema.findById(projectId).populate("tasks", "_id text");
+
+        if (!project) {
+            const error = new Error("Project not found.");
+            error.statusCode = 404;
+            throw error;
+        }
+
+        await TaskSchema.deleteMany({project:projectId})
+        await ProjectSchema.findByIdAndDelete(projectId);
         res.status(200).json({
-            message: "Project successfully deleted",
+            message: "Project and all its tasks successfully deleted",
         });
     } catch (error) {
         if (!error.statusCode) {
@@ -164,11 +168,11 @@ async function postCreateTask(req, res, next) {
 }
 // DELETE/project/:project//delete-task
 async function deleteTask(req, res, next) {
-    const  taskId  = req.params.task;
+    const taskId = req.params.task;
     try {
         const deletedTask = await TaskSchema.findByIdAndDelete(taskId);
         if (!deletedTask) {
-            const error = new Error('Task not found');
+            const error = new Error("Task not found");
             error.statusCode = 404;
             throw error;
         }
