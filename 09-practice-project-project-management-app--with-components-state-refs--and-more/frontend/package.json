@@ -6,8 +6,9 @@
   "proxy": "http://localhost:8080",
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "build": "vite build",
-    "lint": "eslint .. --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint ../01-my-version-project --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
