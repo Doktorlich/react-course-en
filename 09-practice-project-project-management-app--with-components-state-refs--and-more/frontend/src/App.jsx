@@ -4,7 +4,7 @@ import NoProjectSection from "./components/NoProjectSection.jsx";
 import { Fragment, useEffect, useState } from "react";
 import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-const API_BASE_URL = `${process.env.VITE_API_URL}` || "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 function App() {
     const navigate = useNavigate();
     const [projectsState, setProjectsState] = useState({
