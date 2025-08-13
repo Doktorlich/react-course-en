@@ -16,13 +16,18 @@ router.get("/create-project", projectController.getCreateProject);
 router.post("/create-project/create", validationTitle, validationDescription, validationDueDate, projectController.postCreateProject);
 // get запрос для просмотра конкретного проекта+
 router.get("/project/:project", projectController.getProject);
-
+// // открытие страницы изменения для изменения данных
+// router.get("/:project/update-project", projectController.getUpdateProject);
 // пост запрос на удаление проекта+
 router.delete("/project/:project/delete", projectController.deleteProject);
+// //запрос на обновление данных проекта
+// router.patch("/:project/update-project", projectController.putUpdateProject);
 
 //пост запрос на создание задачи
 router.post("/project/:project/create-task", validator.validationTask.text, projectController.postCreateTask);
 // пост запрос на удаление задачи
 router.delete("/project/:project/:task/delete-task", projectController.deleteTask);
+// //запрос на обновление задачи
+router.patch("/project/:project/:task/update-task", projectController.updateTask);
 
 export default router;

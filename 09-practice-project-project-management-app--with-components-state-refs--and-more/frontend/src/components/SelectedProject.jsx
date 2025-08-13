@@ -2,22 +2,18 @@ import Tasks from "./Tasks.jsx";
 import { useParams } from "react-router-dom";
 import Loader from "./Loader.jsx";
 import { useEffect, useState } from "react";
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-export default function SelectedProject({ project, onDelete, onDeleteTask, onAddTask, tasks,onSelectProject }) {
+export default function SelectedProject({ project, onDelete, onDeleteTask, onAddTask, tasks, onSelectProject,onUpdateTask }) {
+    const { projectId } = useParams();
     useEffect(() => {
-        onSelectProject(projectId)
-    }, []);
-    const{projectId} = useParams()
+        onSelectProject(projectId);
+    }, [projectId]);
     if (!project) {
-
-        return <Loader/>;
+        return <Loader />;
     }
-
     const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
-    console.log(project._id);
 
     return (
-        <div className={"w-[35rem] mt-16"}>
+        <div className={"w-[50rem] mt-16"}>
             <header className={"pb-4 mb-4 border-b-2 border-stone-300"}>
                 <h1>{projectId}</h1>
                 <div className={"flex items-center justify-between"}>
@@ -29,7 +25,7 @@ export default function SelectedProject({ project, onDelete, onDeleteTask, onAdd
                 <p className={"mb-4 text-stone-400 "}>{formattedDate}</p>
                 <p className={"text-stone-600 whitespace-pre-wrap"}>{project.description}</p>
             </header>
-            <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks} />
+            <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks} onUpdate={onUpdateTask}/>
         </div>
     );
 }

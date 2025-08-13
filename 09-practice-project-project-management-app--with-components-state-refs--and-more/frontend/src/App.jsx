@@ -6,6 +6,7 @@ import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "./components/Loader.jsx";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+// const API_BASE_URL = "http://localhost:8080/";
 function App() {
     const navigate = useNavigate();
     const [projectsState, setProjectsState] = useState({
@@ -31,7 +32,7 @@ function App() {
                 const allTasks = data.projects.flatMap(project =>
                     project.tasks.map(task => ({
                         ...task,
-                        projectId: project._id, // Добавляем projectId к каждой задаче
+
                     })),
                 );
                 return setProjectsState(prevState => {
@@ -47,18 +48,7 @@ function App() {
                 console.error("Error:", error);
             })
             .finally(() => setIsLoading(false));
-        // navigate("/", { replace: true });
     }, []);
-
-    if (isLoading) {
-        return <Loader />;
-    }
-
-    // useEffect(() => {
-    //     if (projectId) {
-    //         setProjectsState(prevState => ({ ...prevState, selectedProjectId: projectId }));
-    //     }
-    // }, [projectId]);
 
     // работа с task
     function handleAddTask(text) {
@@ -114,7 +104,6 @@ function App() {
                 return setProjectsState(prevState => {
                     return {
                         ...prevState,
-                        // selectedProjectId: undefined,
                         tasks: prevState.tasks.filter(task => {
                             return task._id.toString() !== taskId.toString();
                         }),
@@ -128,10 +117,37 @@ function App() {
         // navigate("/");
     }
 
+    function handleUpdateTask(taskId, updatedText) {
+        fetch(`${API_BASE_URL}project/${projectsState.selectedProjectId}/${taskId}/update-task`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                text: updatedText,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                return setProjectsState(prevState => {
+
+                    return {
+                        ...prevState,
+                        tasks: prevState.tasks.map(task => {
+                            return task._id === taskId ? { ...task, text: updatedText } : task;
+                        }),
+                    };
+                });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
     function handleSelectProject(id) {
-
-
-
         fetch(`${API_BASE_URL}project/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -165,12 +181,9 @@ function App() {
             },
         })
             .then(response => {
-                console.log("handleDeleteProject", id);
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-                // console.log(response.json());
-                console.log(response);
                 return response.json();
             })
             .catch(err => {
@@ -280,6 +293,7 @@ function App() {
                                 onDeleteTask={handleDeleteTask}
                                 tasks={projectsState.tasks}
                                 onSelectProject={handleSelectProject}
+                                onUpdateTask={handleUpdateTask}
                             />
                         )
                     }

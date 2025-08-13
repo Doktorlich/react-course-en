@@ -1,8 +1,45 @@
 import NewTask from "./NewTask.jsx";
 import { useState } from "react";
+import EditTask from "./EditTask.jsx";
 
-export default function Tasks({ onAdd, onDelete, tasks }) {
-    console.log("tasks component", tasks);
+export default function Tasks({ onAdd, onDelete, tasks, onUpdate}) {
+
+    const [editTask, setEditEdit] = useState({ isEdit: false, taskId: undefined});
+
+    function handleStartEdit(id) {
+        setEditEdit(prevState => {
+            return {
+                ...prevState,
+                isEdit: true,
+                taskId: id,
+            };
+        });
+    }
+    function handleCancelEdit() {
+        setEditEdit(prevState => {
+            return {
+                isEdit: false,
+                taskId: undefined,
+            };
+        });
+    }
+    function previewTask(taskId,text)  {
+      return  <div className={"flex justify-between w-full"}>
+            <span className={"w-3/4"}>{text}</span>
+            <div className={"flex justify-between gap-3 "}>
+                <button
+                    className={"text-stone-700 hover:text-red-500"}
+                    onClick={() => handleStartEdit(taskId)}
+                >
+                    Edit
+                </button>
+                <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(taskId)}>
+                    Delete
+                </button>
+            </div>
+        </div>;
+    }
+
     return (
         <section>
             <h2 className={"text- font-bold text-stone-700 mb-4"}>Tasks</h2>
@@ -12,12 +49,15 @@ export default function Tasks({ onAdd, onDelete, tasks }) {
             ) : (
                 <ul className={"p-4 mt-8 rounded-md bg-stone-100"}>
                     {tasks.map(task => {
+                        const isCurrentTaskEditing = editTask.isEdit && editTask.taskId === task._id;
+                        const taskToEdit = tasks.find(task => task._id === editTask.taskId);
                         return (
                             <li key={task._id} className={"flex justify-between my-4"}>
-                                <span>{task.text}</span>
-                                <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(task._id)}>
-                                    Clear
-                                </button>
+                                {isCurrentTaskEditing ? (
+                                    <EditTask task={taskToEdit} onCancelEdit={() => handleCancelEdit()} onUpdate={onUpdate} taskId={editTask.taskId} setEditEdit={setEditEdit}/>
+                                ) : (
+                                    previewTask(task._id, task.text)
+                                )}
                             </li>
                         );
                     })}

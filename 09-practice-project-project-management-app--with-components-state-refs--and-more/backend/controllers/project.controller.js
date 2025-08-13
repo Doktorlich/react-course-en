@@ -110,7 +110,7 @@ async function deleteProject(req, res, next) {
             throw error;
         }
 
-        await TaskSchema.deleteMany({project:projectId})
+        await TaskSchema.deleteMany({ project: projectId });
         await ProjectSchema.findByIdAndDelete(projectId);
         res.status(200).json({
             message: "Project and all its tasks successfully deleted",
@@ -186,7 +186,24 @@ async function deleteTask(req, res, next) {
         next(error);
     }
 }
+// PATCH/project/:project/:task/update-task
+async function updateTask(req, res, next) {
+    const taskId = req.params.task;
+    const updatedText = req.body.text;
+    try {
+        const updateTask = await TaskSchema.findByIdAndUpdate({ _id: taskId }, { $set: { text: updatedText } });
 
+        res.status(200).json({
+            message: "Task successfully updated",
+            task: updateTask,
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
 export const projectController = {
     getHome,
     getCreateProject,
@@ -196,4 +213,5 @@ export const projectController = {
     putUpdateProject,
     postCreateTask,
     deleteTask,
+    updateTask,
 };
