@@ -32,7 +32,7 @@ function App() {
                 const allTasks = data.projects.flatMap(project =>
                     project.tasks.map(task => ({
                         ...task,
-
+                        projectId: project._id, // Добавляем projectId к каждой задаче
                     })),
                 );
                 return setProjectsState(prevState => {
