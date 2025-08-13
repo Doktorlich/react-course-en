@@ -4,6 +4,7 @@ import NoProjectSection from "./components/NoProjectSection.jsx";
 import { Fragment, useEffect, useState } from "react";
 import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
+import Loader from "./components/Loader.jsx";
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 function App() {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ function App() {
         projects: [],
         tasks: [],
     });
+    const [isLoading, setIsLoading] = useState(true);
+    const { projectId } = useParams();
 
     useEffect(() => {
         fetch(`${API_BASE_URL}`, {
@@ -35,15 +38,21 @@ function App() {
                     return {
                         ...prevState,
                         projects: [...data.projects],
+                        selectedProjectId: projectId || undefined,
                         tasks: allTasks,
                     };
                 });
             })
             .catch(error => {
                 console.error("Error:", error);
-            });
+            })
+            .finally(() => setIsLoading(false));
         // navigate("/", { replace: true });
     }, []);
+
+    if (isLoading) {
+        return <Loader />;
+    }
 
     // useEffect(() => {
     //     if (projectId) {
@@ -120,16 +129,9 @@ function App() {
     }
 
     function handleSelectProject(id) {
-        console.log("projectsState", projectsState);
 
-        setProjectsState(prevState => {
-            return {
-                ...prevState,
-                selectedProjectId: id,
-                // tasks: prevState.project.tasks
-            };
-        });
-        navigate(`/project/${id}`);
+
+
         fetch(`${API_BASE_URL}project/${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -141,10 +143,11 @@ function App() {
                 return response.json();
             })
             .then(data => {
-                console.log("DATA SELECTED", data);
+                console.log("select data", data);
                 return setProjectsState(prevState => {
                     return {
                         ...prevState,
+                        selectedProjectId: id,
                         tasks: [...data.project.tasks].reverse(),
                     };
                 });
@@ -152,6 +155,7 @@ function App() {
             .catch(error => {
                 console.error("Error:", error);
             });
+        navigate(`/project/${id}`);
     }
     function handleDeleteProject(id) {
         fetch(`${API_BASE_URL}project/${id}/delete`, {
@@ -264,17 +268,23 @@ function App() {
                     }
                 />
                 <Route
-                    path={"/project/:projectId"}
+                    path={`/project/:projectId`}
                     element={
-                        <SelectedProject
-                            project={selectedProject}
-                            onDelete={handleDeleteProject}
-                            onAddTask={handleAddTask}
-                            onDeleteTask={handleDeleteTask}
-                            tasks={projectsState.tasks}
-                        />
+                        isLoading ? (
+                            <Loader />
+                        ) : (
+                            <SelectedProject
+                                project={selectedProject}
+                                onDelete={handleDeleteProject}
+                                onAddTask={handleAddTask}
+                                onDeleteTask={handleDeleteTask}
+                                tasks={projectsState.tasks}
+                                onSelectProject={handleSelectProject}
+                            />
+                        )
                     }
                 />
+                {/*<Route path={"/*"} element={<App/>}/>*/}
             </Routes>
             {/*{content}*/}
         </main>
