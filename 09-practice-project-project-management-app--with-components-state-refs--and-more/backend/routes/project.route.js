@@ -21,7 +21,7 @@ router.get("/project/:project", projectController.getProject);
 // пост запрос на удаление проекта+
 router.delete("/project/:project/delete", projectController.deleteProject);
 // //запрос на обновление данных проекта
-// router.patch("/:project/update-project", projectController.putUpdateProject);
+router.put("/project/:project/update-project", projectController.putUpdateProject);
 
 //пост запрос на создание задачи
 router.post("/project/:project/create-task", validator.validationTask.text, projectController.postCreateTask);

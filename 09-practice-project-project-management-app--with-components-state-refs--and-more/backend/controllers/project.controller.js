@@ -122,9 +122,23 @@ async function deleteProject(req, res, next) {
         next(error);
     }
 }
-// PATCH/:project/update-project
+// PUT/project/:project/update-project
 async function putUpdateProject(req, res, next) {
+    const newTitle = req.body.title;
+    const newDescription = req.body.description;
+    const newDueDate = req.body.dueDate;
+    const projectId = req.params.project;
     try {
+        const updatedProject = await ProjectSchema.findByIdAndUpdate(
+            { _id: projectId },
+            { $set: { title: newTitle, description: newDescription, dueDate: newDueDate } },
+        );
+        if (!updatedProject) {
+            const error = new Error("The project could not be updated.");
+            error.statusCode = 400;
+            throw error;
+        }
+        res.status(200).json({ message: "Project successfully updated", project: updatedProject });
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500;
@@ -132,6 +146,7 @@ async function putUpdateProject(req, res, next) {
         next(error);
     }
 }
+
 // POST/project/:project/create-task
 async function postCreateTask(req, res, next) {
     const text = req.body.text;
