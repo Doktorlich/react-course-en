@@ -1,15 +1,20 @@
-import Input from "./Input.jsx";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Modal from "./Modal.jsx";
+import Input from "./Input.jsx";
+import { useParams } from "react-router-dom";
 
-export default function NewProject({ onAddData, onReset, onCancel }) {
+export default function EditProject({ project, onCancelEditProject,onUpdateProjectData, }) {
+    const { projectId } = useParams();
+
+    console.log("project edit", project);
+    console.log("projectId edit", projectId);
     const modalRef = useRef();
 
     const titleRef = useRef();
     const descriptionRef = useRef();
     const dueDateRef = useRef();
 
-    function handleDataForm() {
+    function handleDataForm(id) {
         const title = titleRef.current.value;
         const description = descriptionRef.current.value;
         const dueDate = dueDateRef.current.value;
@@ -17,8 +22,8 @@ export default function NewProject({ onAddData, onReset, onCancel }) {
         if (title.trim() === "" || description.trim() === "" || dueDate === "") {
             return modalRef.current.open();
         }
-        onAddData({ title: title, description: description, dueDate: dueDate });
-        onReset();
+        onUpdateProjectData({ _id:id,title: title, description: description, dueDate: dueDate });
+        onCancelEditProject(id)
     }
 
     return (
@@ -31,18 +36,23 @@ export default function NewProject({ onAddData, onReset, onCancel }) {
             <div className={"w-[35rem] mt-16"}>
                 <menu className={"flex items-center justify-end gap-4 my-4"}>
                     <li>
-                        <button className={"text-stone-800 hover:text-stone-950"} onClick={onCancel}>Cancel</button>
+                        <button className={"text-stone-800 hover:text-stone-950"} onClick={() => onCancelEditProject(projectId)}>
+                            Cancel
+                        </button>
                     </li>
                     <li>
-                        <button className={"px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"} onClick={handleDataForm}>
+                        <button
+                            className={"px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950"}
+                            onClick={() => handleDataForm(projectId)}
+                        >
                             Save
                         </button>
                     </li>
                 </menu>
                 <div>
-                    <Input ref={titleRef} label={"Title"} type={"text"} defaultValue={"asdasdasd"}/>
-                    <Input ref={descriptionRef} label={"Description"} textarea type={"text"} defaultValue={"asdasdasd"}/>
-                    <Input ref={dueDateRef} label={"Due date"} type={"date"} defaultValue={""}/>
+                    <Input ref={titleRef} label={"Title"} type={"text"} defaultValue={project.title} />
+                    <Input ref={descriptionRef} label={"Description"} textarea type={"text"} defaultValue={project.description} />
+                    <Input ref={dueDateRef} label={"Due date"} type={"date"} defaultValue={project.dueDate} />
                 </div>
             </div>
         </>

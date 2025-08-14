@@ -16,8 +16,8 @@ router.get("/create-project", projectController.getCreateProject);
 router.post("/create-project/create", validationTitle, validationDescription, validationDueDate, projectController.postCreateProject);
 // get запрос для просмотра конкретного проекта+
 router.get("/project/:project", projectController.getProject);
-// // открытие страницы изменения для изменения данных
-// router.get("/:project/update-project", projectController.getUpdateProject);
+// // открытие страницы  для изменения данных о проекте
+router.get("/project/:project/edit-project", projectController.getEditProject);
 // пост запрос на удаление проекта+
 router.delete("/project/:project/delete", projectController.deleteProject);
 // //запрос на обновление данных проекта

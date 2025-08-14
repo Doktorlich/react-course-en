@@ -122,6 +122,22 @@ async function deleteProject(req, res, next) {
         next(error);
     }
 }
+// GET/project/:project/edit-project
+async function getEditProject(req,res,next){
+    try {
+        res.status(200).json({
+            message: `Successful ones got to the page "project edit".`,
+        });
+    } catch (error) {
+        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+
+}
+
 // PUT/project/:project/update-project
 async function putUpdateProject(req, res, next) {
     const newTitle = req.body.title;
@@ -222,6 +238,7 @@ async function updateTask(req, res, next) {
 export const projectController = {
     getHome,
     getCreateProject,
+    getEditProject,
     postCreateProject,
     getProject,
     deleteProject,

@@ -5,8 +5,9 @@ import { Fragment, useEffect, useState } from "react";
 import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "./components/Loader.jsx";
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-// const API_BASE_URL = "http://localhost:8080/";
+import EditProject from "./components/EditProject.jsx";
+// const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_BASE_URL = "http://localhost:8080/";
 function App() {
     const navigate = useNavigate();
     const [projectsState, setProjectsState] = useState({
@@ -133,7 +134,6 @@ function App() {
             })
             .then(data => {
                 return setProjectsState(prevState => {
-
                     return {
                         ...prevState,
                         tasks: prevState.tasks.map(task => {
@@ -221,6 +221,15 @@ function App() {
         navigate("/");
     }
 
+    function handleCancelEditProject(id) {
+        setProjectsState(prevState => {
+            return {
+                ...prevState,
+                selectedProjectId: id,
+            };
+        });
+        navigate(`/project/${id}`);
+    }
     function handleAddProject(projectFormData) {
         fetch(`${API_BASE_URL}create-project/create`, {
             method: "POST",
@@ -254,7 +263,46 @@ function App() {
             });
         navigate("/");
     }
-
+    function handleUpdateProjectData(updateProjectData) {
+        fetch(`${API_BASE_URL}project/${updateProjectData._id}/update-project`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                title: updateProjectData.title,
+                description: updateProjectData.description,
+                dueDate: updateProjectData.dueDate,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(data => {
+                return setProjectsState(prevState => {
+                    return {
+                        ...prevState,
+                        projects: [
+                            ...prevState.projects.map(project => {
+                                return project._id === updateProjectData._id
+                                    ? {
+                                          ...project,
+                                          title: updateProjectData.title,
+                                          description: updateProjectData.description,
+                                          dueDate: updateProjectData.dueDate,
+                                      }
+                                    : project;
+                            }),
+                        ],
+                        selectedProjectId: updateProjectData._id,
+                    };
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
     function handleResetCreateProject() {
         setProjectsState(prevState => {
             return {
@@ -263,6 +311,7 @@ function App() {
             };
         });
     }
+
     const selectedProject = projectsState.projects.find(project => project._id === projectsState.selectedProjectId);
     return (
         <main className="h-screen my-8 flex gap-8">
@@ -298,7 +347,16 @@ function App() {
                         )
                     }
                 />
-                {/*<Route path={"/*"} element={<App/>}/>*/}
+                <Route
+                    path={"/project/:projectId/edit-project"}
+                    element={
+                        <EditProject
+                            project={selectedProject}
+                            onCancelEditProject={handleCancelEditProject}
+                            onUpdateProjectData={handleUpdateProjectData}
+                        />
+                    }
+                />
             </Routes>
             {/*{content}*/}
         </main>

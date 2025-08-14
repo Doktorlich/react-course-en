@@ -1,15 +1,21 @@
 import Tasks from "./Tasks.jsx";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "./Loader.jsx";
 import { useEffect, useState } from "react";
 export default function SelectedProject({ project, onDelete, onDeleteTask, onAddTask, tasks, onSelectProject,onUpdateTask }) {
     const { projectId } = useParams();
+    const navigate = useNavigate()
     useEffect(() => {
         onSelectProject(projectId);
     }, [projectId]);
     if (!project) {
         return <Loader />;
     }
+
+    function handleStartEditProject(id){
+        navigate(`/project/${id}/edit-project`)
+    }
+
     const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
     return (
@@ -18,9 +24,14 @@ export default function SelectedProject({ project, onDelete, onDeleteTask, onAdd
                 <h1>{projectId}</h1>
                 <div className={"flex items-center justify-between"}>
                     <h1 className={"text-3xl font-bold text-stone-600 mb-2"}>{project.title}</h1>
-                    <button className={"text-stone-600 hover:text-stone-950"} onClick={() => onDelete(project._id)}>
-                        Delete
-                    </button>
+                    <div className={"flex gap-4"}>
+                        <button className={"text-stone-600 hover:text-stone-950"} onClick={() => handleStartEditProject(project._id)}>
+                            Edit
+                        </button>
+                        <button className={"text-stone-600 hover:text-stone-950"} onClick={() => onDelete(project._id)}>
+                            Delete
+                        </button>
+                    </div>
                 </div>
                 <p className={"mb-4 text-stone-400 "}>{formattedDate}</p>
                 <p className={"text-stone-600 whitespace-pre-wrap"}>{project.description}</p>
