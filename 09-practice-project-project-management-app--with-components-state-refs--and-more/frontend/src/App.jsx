@@ -6,8 +6,8 @@ import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "./components/Loader.jsx";
 import EditProject from "./components/EditProject.jsx";
-// const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/";
-const API_BASE_URL = "http://localhost:8080/";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/";
+// const API_BASE_URL = "http://localhost:8080/";
 function App() {
     const navigate = useNavigate();
     const [projectsState, setProjectsState] = useState({
