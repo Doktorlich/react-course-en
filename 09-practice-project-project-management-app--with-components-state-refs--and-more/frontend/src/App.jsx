@@ -6,8 +6,8 @@ import SelectedProject from "./components/SelectedProject.jsx";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "./components/Loader.jsx";
 import EditProject from "./components/EditProject.jsx";
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
-// const API_BASE_URL = "http://localhost:8080/";
+// const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080/";
+const API_BASE_URL = "http://localhost:8080/";
 function App() {
     const navigate = useNavigate();
     const [projectsState, setProjectsState] = useState({
@@ -16,6 +16,9 @@ function App() {
         tasks: [],
     });
     const [isLoading, setIsLoading] = useState(true);
+
+    const [currentDragTask, setCurrentDragTask] = useState(null);
+
     const { projectId } = useParams();
 
     useEffect(() => {
@@ -164,7 +167,7 @@ function App() {
                     return {
                         ...prevState,
                         selectedProjectId: id,
-                        tasks: [...data.project.tasks].reverse(),
+                        tasks: [...data.project.tasks],
                     };
                 });
             })
@@ -312,6 +315,75 @@ function App() {
         });
     }
 
+    function handleDragStart(event, task) {
+        console.log("drag start", task);
+        setCurrentDragTask(task);
+        event.target.classList.add("opacity-40");
+        console.log("currentDragTask", currentDragTask);
+    }
+    function handleDragEnd(event, task) {
+        event.target.classList.remove("opacity-40");
+    }
+    function handleDragOver(event, task) {
+        event.preventDefault();
+    }
+
+    function handleDrop(event, droppedTask) {
+        event.preventDefault();
+        const updatePromises = [
+            fetch(`${API_BASE_URL}project/${projectsState.selectedProjectId}/${currentDragTask._id}/update-order`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order: droppedTask.order, // Берем order задачи, на которую бросили
+                }),
+            }),
+
+            fetch(`${API_BASE_URL}project/${projectsState.selectedProjectId}/${droppedTask._id}/update-order`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    order: currentDragTask.order, // Берем order перетащенной задачи
+                }),
+            }),
+        ];
+
+        Promise.all(updatePromises)
+            .then(responses => {
+                const errorResponse = responses.find(response => !response.ok);
+                if (errorResponse) {
+                    throw new Error("Network response was not ok");
+                }
+                return Promise.all(responses.map(r => r.json()));
+            })
+            .then(data => {
+                setProjectsState(prevState => ({
+                    ...prevState,
+                    tasks: prevState.tasks.map(item => {
+                        if (item._id === currentDragTask._id) {
+                            return { ...item, order: droppedTask.order };
+                        }
+                        if (item._id === droppedTask._id) {
+                            return { ...item, order: currentDragTask.order };
+                        }
+                        return item;
+                    }),
+                }));
+                setCurrentDragTask(null);
+            })
+            .catch(error => {
+                console.error("Error updating tasks:", error);
+            });
+    }
+
+    const sortTask = (a, b) => {
+        if (a.order > b.order) {
+            return 1;
+        } else {
+            return -1;
+        }
+    };
+
     const selectedProject = projectsState.projects.find(project => project._id === projectsState.selectedProjectId);
     return (
         <main className="h-screen my-8 flex gap-8">
@@ -340,9 +412,13 @@ function App() {
                                 onDelete={handleDeleteProject}
                                 onAddTask={handleAddTask}
                                 onDeleteTask={handleDeleteTask}
-                                tasks={projectsState.tasks}
+                                tasks={projectsState.tasks.sort(sortTask)}
                                 onSelectProject={handleSelectProject}
                                 onUpdateTask={handleUpdateTask}
+                                dragStart={handleDragStart}
+                                dragEnd={handleDragEnd}
+                                dragOver={handleDragOver}
+                                drop={handleDrop}
                             />
                         )
                     }

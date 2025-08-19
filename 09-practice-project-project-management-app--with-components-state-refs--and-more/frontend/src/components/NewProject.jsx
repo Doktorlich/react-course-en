@@ -40,9 +40,9 @@ export default function NewProject({ onAddData, onReset, onCancel }) {
                     </li>
                 </menu>
                 <div>
-                    <Input ref={titleRef} label={"Title"} type={"text"} defaultValue={"asdasdasd"}/>
-                    <Input ref={descriptionRef} label={"Description"} textarea type={"text"} defaultValue={"asdasdasd"}/>
-                    <Input ref={dueDateRef} label={"Due date"} type={"date"} defaultValue={""}/>
+                    <Input ref={titleRef} label={"Title"} type={"text"} />
+                    <Input ref={descriptionRef} label={"Description"} textarea type={"text"} />
+                    <Input ref={dueDateRef} label={"Due date"} type={"date"} />
                 </div>
             </div>
         </>

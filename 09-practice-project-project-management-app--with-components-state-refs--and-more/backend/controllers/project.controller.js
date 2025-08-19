@@ -62,7 +62,7 @@ async function postCreateProject(req, res, next) {
         next(error);
     }
 }
-// /project/:project
+// GET/project/:project
 async function getProject(req, res, next) {
     try {
         const projectId = req.params.project;
@@ -72,14 +72,12 @@ async function getProject(req, res, next) {
             error.statusCode = 400;
             throw error;
         }
-        const project = await ProjectSchema.findById(projectId).populate("tasks", "_id text");
+        const project = await ProjectSchema.findById(projectId).populate("tasks", "_id text order");
         if (!project) {
             const error = new Error("Project not found.");
             error.statusCode = 404;
             throw error;
         }
-
-        const task = await TaskSchema;
 
         res.status(200).json({
             message: "Project target page open",
@@ -123,7 +121,7 @@ async function deleteProject(req, res, next) {
     }
 }
 // GET/project/:project/edit-project
-async function getEditProject(req,res,next){
+async function getEditProject(req, res, next) {
     try {
         res.status(200).json({
             message: `Successful ones got to the page "project edit".`,
@@ -135,7 +133,6 @@ async function getEditProject(req,res,next){
         }
         next(error);
     }
-
 }
 
 // PUT/project/:project/update-project
@@ -174,7 +171,20 @@ async function postCreateTask(req, res, next) {
             error.statusCode = 400;
             throw error;
         }
-        const newTask = new TaskSchema({ text: text, project: projectId });
+
+        const tasksList = await ProjectSchema.findById(projectId).populate("tasks", "_id text order");
+        console.log("tasksList", tasksList.tasks);
+
+        let order = 1;
+        if (tasksList.tasks.length > 0) {
+            const findGreatestNum = tasksList.tasks.reduce((accMax, curTask) => {
+                return curTask.order !== undefined ? Math.max(accMax, curTask.order) : accMax;
+            }, -Infinity);
+            order = +findGreatestNum + +1;
+        }
+        console.log(order);
+
+        const newTask = new TaskSchema({ text: text, order: order, project: projectId });
         await newTask.save();
 
         const project = await ProjectSchema.findById(projectId);
@@ -235,6 +245,26 @@ async function updateTask(req, res, next) {
         next(error);
     }
 }
+
+// PATCH/project/:project/:task/update-order
+async function updateOrderTask(req, res, next) {
+    const taskId = req.params.task;
+    const updatedOrder = req.body.order;
+    try {
+        const updateOrderTask = await TaskSchema.findByIdAndUpdate({ _id: taskId }, { $set: { order: updatedOrder } });
+
+        res.status(200).json({
+            message: "Task order successfully updated",
+            task: updateOrderTask,
+        });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    }
+}
+
 export const projectController = {
     getHome,
     getCreateProject,
@@ -246,4 +276,5 @@ export const projectController = {
     postCreateTask,
     deleteTask,
     updateTask,
+    updateOrderTask,
 };

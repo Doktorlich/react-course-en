@@ -29,5 +29,9 @@ router.post("/project/:project/create-task", validator.validationTask.text, proj
 router.delete("/project/:project/:task/delete-task", projectController.deleteTask);
 // //запрос на обновление задачи
 router.patch("/project/:project/:task/update-task", projectController.updateTask);
+// //запрос на обновление order для drag and drop
+router.patch("/project/:project/:task/update-order", projectController.updateOrderTask);
+
+
 
 export default router;

@@ -2,9 +2,18 @@ import NewTask from "./NewTask.jsx";
 import { useState } from "react";
 import EditTask from "./EditTask.jsx";
 
-export default function Tasks({ onAdd, onDelete, tasks, onUpdate}) {
+export default function Tasks({
+    onAdd,
+    onDelete,
+    tasks,
+    onUpdate,
 
-    const [editTask, setEditEdit] = useState({ isEdit: false, taskId: undefined});
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd,
+    onDragOver: handleDragOver,
+    onDrop: handleDrop,
+}) {
+    const [editTask, setEditEdit] = useState({ isEdit: false, taskId: undefined });
 
     function handleStartEdit(id) {
         setEditEdit(prevState => {
@@ -23,21 +32,20 @@ export default function Tasks({ onAdd, onDelete, tasks, onUpdate}) {
             };
         });
     }
-    function previewTask(taskId,text)  {
-      return  <div className={"flex justify-between w-full"}>
-            <span className={"w-3/4"}>{text}</span>
-            <div className={"flex justify-between gap-3 "}>
-                <button
-                    className={"text-stone-700 hover:text-red-500"}
-                    onClick={() => handleStartEdit(taskId)}
-                >
-                    Edit
-                </button>
-                <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(taskId)}>
-                    Delete
-                </button>
+    function previewTask(taskId, text) {
+        return (
+            <div className={"flex justify-between w-full "}>
+                <span className={"w-3/4 my-4 "}>{text}</span>
+                <div className={"flex justify-between gap-3 "}>
+                    <button className={"text-stone-700 hover:text-red-500"} onClick={() => handleStartEdit(taskId)}>
+                        Edit
+                    </button>
+                    <button className={"text-stone-700 hover:text-red-500"} onClick={() => onDelete(taskId)}>
+                        Delete
+                    </button>
+                </div>
             </div>
-        </div>;
+        );
     }
 
     return (
@@ -47,14 +55,39 @@ export default function Tasks({ onAdd, onDelete, tasks, onUpdate}) {
             {tasks.length === 0 ? (
                 <p className={"text-stone-800 my-4"}>This project does not have any tasks yet.</p>
             ) : (
-                <ul className={"p-4 mt-8 rounded-md bg-stone-100"}>
+                <ul className={"flex flex-col gap-2 p-4 mt-8 rounded-md "}>
                     {tasks.map(task => {
                         const isCurrentTaskEditing = editTask.isEdit && editTask.taskId === task._id;
                         const taskToEdit = tasks.find(task => task._id === editTask.taskId);
                         return (
-                            <li key={task._id} className={"flex justify-between my-4"}>
+                            <li
+                                key={task._id}
+                                className={"bg-stone-200 px-2 cursor-move "}
+                                draggable={true}
+                                onDragStart={event => {
+                                    handleDragStart(event, task);
+                                }}
+                                onDragLeave={event => {
+                                    handleDragEnd(event);
+                                }}
+                                onDragEnd={event => {
+                                    handleDragEnd(event);
+                                }}
+                                onDragOver={event => {
+                                    handleDragOver(event);
+                                }}
+                                onDrop={event => {
+                                    handleDrop(event, task, tasks);
+                                }}
+                            >
                                 {isCurrentTaskEditing ? (
-                                    <EditTask task={taskToEdit} onCancelEdit={() => handleCancelEdit()} onUpdate={onUpdate} taskId={editTask.taskId} setEditEdit={setEditEdit}/>
+                                    <EditTask
+                                        task={taskToEdit}
+                                        onCancelEdit={() => handleCancelEdit()}
+                                        onUpdate={onUpdate}
+                                        taskId={editTask.taskId}
+                                        setEditEdit={setEditEdit}
+                                    />
                                 ) : (
                                     previewTask(task._id, task.text)
                                 )}

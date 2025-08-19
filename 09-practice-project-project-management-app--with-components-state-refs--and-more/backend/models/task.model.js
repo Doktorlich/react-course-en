@@ -5,6 +5,11 @@ const taskShema = new Schema({
         type: String,
         required: true,
     },
+    order: {
+        type: Number,
+        required: true,
+        unique:true,
+    },
     project: {
         type: Schema.Types.ObjectId,
         ref: "Project",

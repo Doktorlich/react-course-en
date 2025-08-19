@@ -2,9 +2,22 @@ import Tasks from "./Tasks.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "./Loader.jsx";
 import { useEffect, useState } from "react";
-export default function SelectedProject({ project, onDelete, onDeleteTask, onAddTask, tasks, onSelectProject,onUpdateTask }) {
+export default function SelectedProject({
+    project,
+    onDelete,
+    onDeleteTask,
+    onAddTask,
+    tasks,
+    onSelectProject,
+    onUpdateTask,
+    drop,
+    dragEnd,
+    dragLeave,
+    dragOver,
+    dragStart,
+}) {
     const { projectId } = useParams();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     useEffect(() => {
         onSelectProject(projectId);
     }, [projectId]);
@@ -12,8 +25,8 @@ export default function SelectedProject({ project, onDelete, onDeleteTask, onAdd
         return <Loader />;
     }
 
-    function handleStartEditProject(id){
-        navigate(`/project/${id}/edit-project`)
+    function handleStartEditProject(id) {
+        navigate(`/project/${id}/edit-project`);
     }
 
     const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
@@ -36,7 +49,17 @@ export default function SelectedProject({ project, onDelete, onDeleteTask, onAdd
                 <p className={"mb-4 text-stone-400 "}>{formattedDate}</p>
                 <p className={"text-stone-600 whitespace-pre-wrap"}>{project.description}</p>
             </header>
-            <Tasks onAdd={onAddTask} onDelete={onDeleteTask} tasks={tasks} onUpdate={onUpdateTask}/>
+            <Tasks
+                onAdd={onAddTask}
+                onDelete={onDeleteTask}
+                tasks={tasks}
+                onUpdate={onUpdateTask}
+
+                onDrop={drop}
+                onDragEnd={dragEnd}
+                onDragOver={dragOver}
+                onDragStart={dragStart}
+            />
         </div>
     );
 }
