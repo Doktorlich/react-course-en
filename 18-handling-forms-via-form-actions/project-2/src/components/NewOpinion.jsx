@@ -1,8 +1,12 @@
-import { useActionState } from "react";
+import { use, useActionState } from "react";
 import { hasMinLength, isNotEmpty } from "../util/validationForm.js";
+import { OpinionsContext } from "../store/opinions-context.jsx";
+import Submit from "./Submit.jsx";
 
 export function NewOpinion() {
-    function shareOpinionAction(prevState, formData) {
+    const { addOpinion } = use(OpinionsContext);
+
+    async function shareOpinionAction(prevState, formData) {
         const userName = formData.get("userName");
         const title = formData.get("title");
         const userOpinion = formData.get("body");
@@ -25,10 +29,12 @@ export function NewOpinion() {
             };
         }
 
+        await addOpinion({ userName: userName, title: title, body: userOpinion });
+
         return { errors: null };
     }
 
-    const [formState, formAction] = useActionState(shareOpinionAction, { errors: null });
+    const [formState, formAction, pending] = useActionState(shareOpinionAction, { errors: null });
     return (
         <div id="new-opinion">
             <h2>Share your opinion!</h2>
@@ -63,15 +69,15 @@ export function NewOpinion() {
                         defaultValue={formState.enteredValue?.userOpinion}
                     ></textarea>
                 </p>
-                <ul className={"errors"}>
-                    {formState.errors &&
-                        formState.errors.map(error => {
+                {formState.errors && (
+                    <ul className={"errors"}>
+                        {formState.errors.map(error => {
                             return <li key={error}>{error}</li>;
                         })}
-                </ul>
-                <p className="actions">
-                    <button type="submit">Submit</button>
-                </p>
+                    </ul>
+                )}
+
+                <Submit />
             </form>
         </div>
     );
