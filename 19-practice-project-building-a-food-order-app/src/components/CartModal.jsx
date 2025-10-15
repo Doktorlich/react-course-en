@@ -1,9 +1,13 @@
-import { forwardRef, useContext, useImperativeHandle, useRef } from "react";
+import { createContext, forwardRef, useContext, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CartContext } from "../store/cart-context.jsx";
+import { OrderContext } from "../store/order-context.jsx";
+import OrderModal from "./OrderModal.jsx";
 
 const CartModal = forwardRef(function CartModal({}, ref) {
     const dialog = useRef();
+    const orderModalRef = useRef();
+
     const {
         cartProducts,
         totalAmount,
@@ -24,9 +28,13 @@ const CartModal = forwardRef(function CartModal({}, ref) {
         };
     });
 
-    function handleModalClose() {
+    function handleModalCartClose() {
         dialog.current.close();
     }
+    function handleModalOrderOpen() {
+        orderModalRef.current.open()
+    }
+
 
     const isCartEmpty =
         cartProducts.length > 0 ? (
@@ -68,6 +76,7 @@ const CartModal = forwardRef(function CartModal({}, ref) {
 
     return createPortal(
         <dialog ref={dialog} className={"modal"}>
+            <OrderModal ref={orderModalRef}/>
             <div className={"cart"}>
                 <h2>Your Cart</h2>
                 {isCartEmpty}
@@ -76,12 +85,17 @@ const CartModal = forwardRef(function CartModal({}, ref) {
                     <button
                         className={"text-button"}
                         onClick={() => {
-                            handleModalClose();
+                            handleModalCartClose();
                         }}
                     >
                         Close
                     </button>
-                    <button className={"button"} onClick={() => {}}>
+                    <button
+                        className={"button"}
+                        onClick={() => {
+                            handleModalOrderOpen();
+                        }}
+                    >
                         Go to Checkout
                     </button>
                 </div>
