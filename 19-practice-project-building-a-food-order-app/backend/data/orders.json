@@ -1,1 +1,182 @@
-[]
+[
+    {
+        "customer": {
+            "email": "doklich@mail.ru",
+            "name": "Doktorlich Doktorlich",
+            "street": "no adress",
+            "postal-code": "no adress",
+            "city": "no adress"
+        },
+        "items": [
+            {
+                "product": {
+                    "id": "m1",
+                    "name": "Mac & Cheese",
+                    "price": "8.99",
+                    "description": "Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.",
+                    "image": "images/mac-and-cheese.jpg"
+                },
+                "quantity": 1
+            },
+            {
+                "product": {
+                    "id": "m2",
+                    "name": "Margherita Pizza",
+                    "price": "12.99",
+                    "description": "A classic pizza with fresh mozzarella, tomatoes, and basil on a thin and crispy crust.",
+                    "image": "images/margherita-pizza.jpg"
+                },
+                "quantity": 3
+            },
+            {
+                "product": {
+                    "id": "m3",
+                    "name": "Caesar Salad",
+                    "price": "7.99",
+                    "description": "Romaine lettuce tossed in Caesar dressing, topped with croutons and parmesan shavings.",
+                    "image": "images/caesar-salad.jpg"
+                },
+                "quantity": 2
+            },
+            {
+                "product": {
+                    "id": "m4",
+                    "name": "Spaghetti Carbonara",
+                    "price": "10.99",
+                    "description": "Al dente spaghetti with a creamy sauce made from egg yolk, pecorino cheese, pancetta, and pepper.",
+                    "image": "images/spaghetti-carbonara.jpg"
+                },
+                "quantity": 2
+            }
+        ],
+        "id": "141.57629563316056"
+    },
+    {
+        "customer": {
+            "email": "doklich@mail.ru",
+            "name": "Doktorlich Doktorlich",
+            "street": "no adress",
+            "postal-code": "no adress",
+            "city": "no adress"
+        },
+        "items": [
+            {
+                "product": {
+                    "id": "m1",
+                    "name": "Mac & Cheese",
+                    "price": "8.99",
+                    "description": "Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.",
+                    "image": "images/mac-and-cheese.jpg"
+                },
+                "quantity": 2
+            },
+            {
+                "product": {
+                    "id": "m4",
+                    "name": "Spaghetti Carbonara",
+                    "price": "10.99",
+                    "description": "Al dente spaghetti with a creamy sauce made from egg yolk, pecorino cheese, pancetta, and pepper.",
+                    "image": "images/spaghetti-carbonara.jpg"
+                },
+                "quantity": 2
+            },
+            {
+                "product": {
+                    "id": "m3",
+                    "name": "Caesar Salad",
+                    "price": "7.99",
+                    "description": "Romaine lettuce tossed in Caesar dressing, topped with croutons and parmesan shavings.",
+                    "image": "images/caesar-salad.jpg"
+                },
+                "quantity": 2
+            },
+            {
+                "product": {
+                    "id": "m2",
+                    "name": "Margherita Pizza",
+                    "price": "12.99",
+                    "description": "A classic pizza with fresh mozzarella, tomatoes, and basil on a thin and crispy crust.",
+                    "image": "images/margherita-pizza.jpg"
+                },
+                "quantity": 2
+            }
+        ],
+        "id": "428.23836940447137"
+    },
+    {
+        "customer": {
+            "email": "doklich@mail.ru",
+            "name": "Doktorlich Doktorlich",
+            "street": "no adress",
+            "postal-code": "no adress",
+            "city": "no adress"
+        },
+        "items": [
+            {
+                "product": {
+                    "id": "m1",
+                    "name": "Mac & Cheese",
+                    "price": "8.99",
+                    "description": "Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.",
+                    "image": "images/mac-and-cheese.jpg"
+                },
+                "quantity": 10
+            }
+        ],
+        "id": "66.77274058074478"
+    },
+    {
+        "customer": {
+            "email": "doklich@mail.ru",
+            "name": "Doktorlich Doktorlich",
+            "street": "no adress",
+            "postal-code": "no adress",
+            "city": "no adress"
+        },
+        "items": [
+            {
+                "product": {
+                    "id": "m2",
+                    "name": "Margherita Pizza",
+                    "price": "12.99",
+                    "description": "A classic pizza with fresh mozzarella, tomatoes, and basil on a thin and crispy crust.",
+                    "image": "images/margherita-pizza.jpg"
+                },
+                "quantity": 10
+            }
+        ],
+        "id": "583.0856459145126"
+    },
+    {
+        "customer": {
+            "email": "doklich@mail.ru",
+            "name": "Doktorlich Doktorlich",
+            "street": "no adress",
+            "postal-code": "123456",
+            "city": "no adress"
+        },
+        "items": [
+            {
+                "product": {
+                    "id": "m1",
+                    "name": "Mac & Cheese",
+                    "price": "8.99",
+                    "description": "Creamy cheddar cheese mixed with perfectly cooked macaroni, topped with crispy breadcrumbs. A classic comfort food.",
+                    "image": "images/mac-and-cheese.jpg"
+                },
+                "quantity": 10
+            },
+            {
+                "product": {
+                    "id": "m3",
+                    "name": "Caesar Salad",
+                    "price": "7.99",
+                    "description": "Romaine lettuce tossed in Caesar dressing, topped with croutons and parmesan shavings.",
+                    "image": "images/caesar-salad.jpg"
+                },
+                "quantity": 10
+            }
+        ],
+        "id": "159.27108218717612"
+    }
+]

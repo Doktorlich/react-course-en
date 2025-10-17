@@ -1,10 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { ProductContext } from "./product-context.jsx";
+import { useFetch } from "../hooks/useFetch.js";
 
 export const CartContext = createContext({
     cartProducts: null,
+    setCartProducts: () => {},
     totalAmount: 0,
-
+    setTotalAmount: () => {
+    },
     addProductToCart: id => {},
     removeProductFromCart: id => {},
     increaseProductQuantity: id => {},
@@ -40,8 +43,6 @@ export function CartContextProvider({ children }) {
         });
     }
 
-
-
     //фактически нет удаления кнопки если смотреть на первоначальный дизайн,
     // скорее всего удаление товара из корзины , происходит при уменьшении количества товаров до нуля
     function removeProductFromCart(id) {}
@@ -74,7 +75,8 @@ export function CartContextProvider({ children }) {
     const contextValue = {
         cartProducts: cartProducts,
         totalAmount,
-
+        setCartProducts,
+        setTotalAmount,
         addProductToCart,
         removeProductFromCart,
         increaseProductQuantity,
