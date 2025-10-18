@@ -9,13 +9,10 @@ export const ProductContext = createContext({
 });
 
 export function ProductContextProvider({ children }) {
-
-
     const { isFetching, setIsFetching, error, setFetchedData, fetchedData } = useFetch(
         fetchProducts,
         [],
     );
-
     const contextValue = {
         products: fetchedData,
         isFetching,

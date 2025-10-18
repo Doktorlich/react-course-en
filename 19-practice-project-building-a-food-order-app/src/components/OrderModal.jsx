@@ -3,9 +3,11 @@ import { forwardRef, useContext, useImperativeHandle, useRef, useActionState } f
 import { CartContext } from "../store/cart-context.jsx";
 import { isEmail, isNotEmpty, hasMinLength } from "../util/validation-order.js";
 import { postOrder } from "../services/http.js";
+import ModalStatus from "./ModalStatus.jsx";
 
 const OrderModal = forwardRef(function OrderModal({}, ref) {
     const dialog = useRef();
+    const messageModalRef = useRef()
     const { totalAmount, cartProducts,setCartProducts, setTotalAmount } = useContext(CartContext);
 
     async function orderAction(prevState, formData) {
@@ -62,6 +64,7 @@ const OrderModal = forwardRef(function OrderModal({}, ref) {
             setCartProducts([])
             setTotalAmount(0)
             handleModalOrderClose();
+            handleModalMessageOpen()
             return { errors: null };
         } catch (error) {
             alert("Failed to submit order. Please try again.");
@@ -88,9 +91,13 @@ const OrderModal = forwardRef(function OrderModal({}, ref) {
     function handleModalOrderClose() {
         dialog.current.close();
     }
+    function handleModalMessageOpen() {
+        messageModalRef.current.open()
+    }
 
     return createPortal(
         <dialog ref={dialog} className={"modal"}>
+            <ModalStatus ref={messageModalRef}/>
             <h2>Checkout</h2>
             <p>Total Amount: ${totalAmount}</p>
             <form action={formAction}>

@@ -1,20 +1,15 @@
 import { createContext, forwardRef, useContext, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CartContext } from "../store/cart-context.jsx";
-import { OrderContext } from "../store/order-context.jsx";
+
 import OrderModal from "./OrderModal.jsx";
 
 const CartModal = forwardRef(function CartModal({}, ref) {
     const dialog = useRef();
     const orderModalRef = useRef();
 
-    const {
-        cartProducts,
-        totalAmount,
-        increaseProductQuantity,
-        decreaseProductQuantity,
-        removeProductFromCart,
-    } = useContext(CartContext);
+    const { cartProducts, totalAmount, increaseProductQuantity, decreaseProductQuantity } =
+        useContext(CartContext);
 
     console.log("products cart", cartProducts);
     useImperativeHandle(ref, () => {
@@ -70,7 +65,9 @@ const CartModal = forwardRef(function CartModal({}, ref) {
             <div className={"cart"}>
                 <h2>Your Cart</h2>
                 {isCartEmpty}
-                {cartProducts && totalAmount >0 && <p className={"cart-total"}>${totalAmount.toFixed(2)}</p>}
+                {cartProducts && totalAmount > 0 && (
+                    <p className={"cart-total"}>${totalAmount.toFixed(2)}</p>
+                )}
                 <div className={"modal-actions"}>
                     <button className={"text-button"} onClick={() => handleModalCartClose()}>
                         Close

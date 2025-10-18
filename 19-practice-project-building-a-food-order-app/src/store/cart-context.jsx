@@ -6,8 +6,7 @@ export const CartContext = createContext({
     cartProducts: null,
     setCartProducts: () => {},
     totalAmount: 0,
-    setTotalAmount: () => {
-    },
+    setTotalAmount: () => {},
     addProductToCart: id => {},
     removeProductFromCart: id => {},
     increaseProductQuantity: id => {},
@@ -70,7 +69,6 @@ export function CartContextProvider({ children }) {
                 })
                 .filter(item => item !== null);
         });
-        console.log(cartProducts);
     }, []);
     const contextValue = {
         cartProducts: cartProducts,
