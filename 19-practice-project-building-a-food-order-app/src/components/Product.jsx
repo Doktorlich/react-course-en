@@ -1,5 +1,7 @@
-import { Fragment, useContext } from "react";
-import { CartContext } from "../store/cart-context.jsx";
+import { useContext } from "react";
+import { CartContext } from "../store/CartContext.jsx";
+import { currencyFormatter } from "../util/formatting.js";
+import Button from "./UI/Button.jsx";
 
 export default function Product({ product }) {
     const { addProductToCart } = useContext(CartContext);
@@ -8,19 +10,18 @@ export default function Product({ product }) {
             <img src={`${product.image}`} alt="IMAGE PRODUCT" />
             <h3>{product.name}</h3>
             <div className="meal-item-actions">
-                <p className={"meal-item-price"}>${product.price}</p>
+                <p className={"meal-item-price"}>{currencyFormatter.format(product.price)}</p>
             </div>
 
             <p className={"meal-item-description"}>{product.description}</p>
             <div className="meal-item-actions">
-                <button
-                    className={"button"}
+                <Button
                     onClick={() => {
                         addProductToCart(product.id);
                     }}
                 >
                     Add to Cart
-                </button>
+                </Button>
             </div>
         </article>
     );

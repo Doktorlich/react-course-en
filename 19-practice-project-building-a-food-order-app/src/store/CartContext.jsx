@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { ProductContext } from "./product-context.jsx";
+import { ProductContext } from "./ProductContext.jsx";
 import { useFetch } from "../hooks/useFetch.js";
 
 export const CartContext = createContext({

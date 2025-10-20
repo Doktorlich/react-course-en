@@ -1,12 +1,10 @@
 import Product from "./Product.jsx";
 import { Fragment, useContext } from "react";
-import { ProductContext } from "../store/product-context.jsx";
+import { ProductContext } from "../store/ProductContext.jsx";
 
-
+console.log(navigator);
 export default function Products() {
-    const { products, error, isFetching, setFetchedData, setIsFetching } =
-        useContext(ProductContext);
-
+    const { products, error, isFetching, setFetchedData, setIsFetching } =   useContext(ProductContext);
 
     return (
         <Fragment>

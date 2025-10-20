@@ -1,5 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
+import Button from "./UI/Button.jsx";
 
 const ModalStatus = forwardRef(function ModalStatus({}, ref) {
     const dialog = useRef(null);
@@ -23,14 +24,14 @@ const ModalStatus = forwardRef(function ModalStatus({}, ref) {
             <p>We will get back you with more details via email within the next few minutes.</p>
             <div className={"modal-actions"}>
 
-                <button
+                <Button
                     className={"button"}
                     onClick={() => {
                         handleModalMessageClose();
                     }}
                 >
                     Okay
-                </button>
+                </Button>
             </div>
         </dialog>,
         document.getElementById("modal"),

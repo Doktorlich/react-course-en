@@ -1,37 +1,13 @@
-import { createContext, forwardRef, useContext, useImperativeHandle, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useContext, useRef } from "react";
 import { CartContext } from "../store/CartContext.jsx";
-
-import OrderModal from "./OrderModal.jsx";
+import Modal from "./UI/Modal.jsx";
 import Button from "./UI/Button.jsx";
+import OrderModal from "./OrderModal.jsx";
 
-const CartModal = forwardRef(function CartModal({}, ref) {
-    const dialog = useRef();
-    const orderModalRef = useRef();
-
+export default function CartAlternate({}) {
     const { cartProducts, totalAmount, increaseProductQuantity, decreaseProductQuantity } =
         useContext(CartContext);
-
-    console.log("products cart", cartProducts);
-    useImperativeHandle(ref, () => {
-        return {
-            open() {
-                dialog.current.showModal();
-            },
-            close() {
-                dialog.current.close();
-            },
-        };
-    });
-
-    function handleModalCartClose() {
-        dialog.current.close();
-    }
-    function handleModalOrderOpen() {
-        orderModalRef.current.open();
-        handleModalCartClose();
-    }
-
+    const orderModalRef = useRef();
     const isProducts = cartProducts.length > 0;
     const isCartEmpty =
         cartProducts.length > 0 ? (
@@ -64,8 +40,12 @@ const CartModal = forwardRef(function CartModal({}, ref) {
             <p>Cart is empty...</p>
         );
 
-    return createPortal(
-        <dialog ref={dialog} className={"modal"}>
+
+    function handleModalOrderOpen() {
+        orderModalRef.current.open();
+    }
+    return (
+        <Modal open classNme={"modal"}>
             <OrderModal ref={orderModalRef} />
             <div className={"cart"}>
                 <h2>Your Cart</h2>
@@ -74,7 +54,7 @@ const CartModal = forwardRef(function CartModal({}, ref) {
                     <p className={"cart-total"}>${totalAmount.toFixed(2)}</p>
                 )}
                 <div className={"modal-actions"}>
-                    <Button textOnly onClick={() => handleModalCartClose()}>
+                    <Button textOnly>
                         Close
                     </Button>
                     <Button onClick={() => handleModalOrderOpen()} disabled={!isProducts}>
@@ -82,8 +62,6 @@ const CartModal = forwardRef(function CartModal({}, ref) {
                     </Button>
                 </div>
             </div>
-        </dialog>,
-        document.getElementById("modal"),
+        </Modal>
     );
-});
-export default CartModal;
+}
