@@ -3,16 +3,24 @@ import classes from "./ProductItem.module.css";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../store/cart-slice";
 
+
+
 const ProductItem = props => {
     const dispatch = useDispatch();
-    const {  title, price, description } = props;
+    const { id, title, price, description } = props;
     console.log(title, price, description, "title, price, description ");
 
+
     function handleAddToCart() {
+
         dispatch(
-            cartActions.addToCart(
-                { id:title+price, title: title, quantity: 1, price: price, description: description },
-            ),
+            cartActions.addToCart({
+                id: id,
+                title: title,
+                quantity: 1,
+                price: price,
+                description: description,
+            }),
         );
     }
 
@@ -25,7 +33,7 @@ const ProductItem = props => {
                 </header>
                 <p>{description}</p>
                 <div className={classes.actions}>
-                    <button onClick={ handleAddToCart}>Add to Cart</button>
+                    <button onClick={handleAddToCart}>Add to Cart</button>
                 </div>
             </Card>
         </li>
