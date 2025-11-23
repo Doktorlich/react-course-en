@@ -1,17 +1,26 @@
 import EventsList from "../components/EventsList";
-import { useLoaderData } from "react-router-dom";
+import { Await, defer, useLoaderData } from "react-router-dom";
+import { Suspense } from "react";
 
 function EventsPage() {
-    const data = useLoaderData();
-    // if (data.isError) {
-    //     return <p>{data.message}</p>;
-    // }
-    return <>{<EventsList events={data} />}</>;
+    const { events } = useLoaderData();
+
+    return (
+        <Suspense fallback={<p style={{ textAlign: "center", color: "red" }}>Loading...</p>}>
+            <Await resolve={events}>
+                {async loadedEvents => {
+                     return <EventsList events={loadedEvents} />;
+                }}
+            </Await>
+        </Suspense>
+    );
 }
 
 export default EventsPage;
 
-export async function loader() {
+async function loadEvents() {
+    // изучить подобнее как осуществляется отложенная загрузка в RRD 7й версии и выше
+
     const response = await fetch("http://localhost:8080/events", {
         method: "GET",
     });
@@ -22,6 +31,13 @@ export async function loader() {
         // deprecated
         // throw json({message: "Could not fetch events."})
     } else {
-        return response;
+        const resData = await response.json();
+        return resData.events;
     }
+}
+
+export function loader() {
+    return defer({
+        events: loadEvents(),
+    });
 }

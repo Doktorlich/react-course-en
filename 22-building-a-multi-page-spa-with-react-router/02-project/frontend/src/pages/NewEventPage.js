@@ -1,7 +1,8 @@
+import EventForm from "../components/EventForm";
+
 export default function NewEventPage() {
-    return (
-        <main className={"content"}>
-            <h1>New event page</h1>
-        </main>
-    );
+    function submitHandler(event) {
+        event.preventDefault();
+    }
+    return <EventForm onClick={() => submitHandler} method={"POST"} />;
 }

@@ -8,7 +8,7 @@ function EventsList({events}) {
         <div className={classes.events}>
             <h1>All Events</h1>
             <ul className={classes.list}>
-                {events.events.map(event => (
+                {events.map(event => (
                     <li key={event.id} className={classes.item}>
                         <NavLink to={`/events/${event.id}`}>
                             <img src={event.image} alt={event.title} />
