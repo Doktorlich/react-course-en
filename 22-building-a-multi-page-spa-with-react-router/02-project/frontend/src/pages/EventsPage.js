@@ -1,5 +1,5 @@
 import EventsList from "../components/EventsList";
-import { Await, defer, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
 
 function EventsPage() {
@@ -9,7 +9,7 @@ function EventsPage() {
         <Suspense fallback={<p style={{ textAlign: "center", color: "red" }}>Loading...</p>}>
             <Await resolve={events}>
                 {async loadedEvents => {
-                     return <EventsList events={loadedEvents} />;
+                    return <EventsList events={loadedEvents} />;
                 }}
             </Await>
         </Suspense>
@@ -37,7 +37,7 @@ async function loadEvents() {
 }
 
 export function loader() {
-    return defer({
+    return {
         events: loadEvents(),
-    });
+    };
 }
