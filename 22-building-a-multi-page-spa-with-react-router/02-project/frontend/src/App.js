@@ -5,13 +5,15 @@ import EventDetailPage, {
     loader as eventDetailLoader,
     action as deleteEventAction,
 } from "./pages/EventDetailPage";
-import EditEventPage, { } from "./pages/EditEventPage";
+import EditEventPage from "./pages/EditEventPage";
 import RootLayout from "./pages/RootLayout";
 import EventsRootLayout from "./pages/EventsRootLayout";
 import ErrorPage from "./pages/ErrorPage";
-import {action as manipulateEventAction} from "./components/EventForm"
+import { action as manipulateEventAction } from "./components/EventForm";
 import NewEventPage from "./pages/NewEventPage";
-import NewsletterPage , { action as newsletterAction} from "./pages/NewsletterPage";
+import NewsletterPage, { action as newsletterAction } from "./pages/NewsletterPage";
+
+
 
 const router = createBrowserRouter([
     {
@@ -39,7 +41,11 @@ const router = createBrowserRouter([
                                 element: <EventDetailPage />,
                                 action: deleteEventAction,
                             },
-                            { path: "edit", element: <EditEventPage />, action: manipulateEventAction },
+                            {
+                                path: "edit",
+                                element: <EditEventPage />,
+                                action: manipulateEventAction,
+                            },
                         ],
                     },
                     {
@@ -49,7 +55,7 @@ const router = createBrowserRouter([
                     },
                 ],
             },
-            {path:"newsletter", element:<NewsletterPage/> , action: newsletterAction}
+            { path: "newsletter", element: <NewsletterPage />, action: newsletterAction },
         ],
     },
 ]);

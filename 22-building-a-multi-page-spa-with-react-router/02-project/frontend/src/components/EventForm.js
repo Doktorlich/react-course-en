@@ -15,10 +15,9 @@ function EventForm({ method, event }) {
     return (
         <Form method={method} className={classes.form}>
             {data && data.errors && (
-                <ul  className={classes.errors}>
+                <ul className={classes.errors}>
                     {Object.values(data.errors).map(err => {
-
-                        return <li key={err} > {err}</li>;
+                        return <li key={err}> {err}</li>;
                     })}
                 </ul>
             )}
@@ -28,7 +27,7 @@ function EventForm({ method, event }) {
                     id="title"
                     type="text"
                     name="title"
-
+                    required
                     defaultValue={event && event.title}
                 />
             </p>
@@ -38,7 +37,7 @@ function EventForm({ method, event }) {
                     id="image"
                     type="url"
                     name="image"
-
+                    required
                     defaultValue={event && event.image}
                 />
             </p>
@@ -48,7 +47,7 @@ function EventForm({ method, event }) {
                     id="date"
                     type="date"
                     name="date"
-
+                    required
                     defaultValue={event && event.date}
                 />
             </p>
@@ -58,7 +57,7 @@ function EventForm({ method, event }) {
                     id="description"
                     name="description"
                     rows="5"
-
+                    required
                     defaultValue={event && event.description}
                 />
             </p>
@@ -79,10 +78,10 @@ export async function action({ request, params }) {
     const id = params.eventId;
     let url = "http://localhost:8080/events";
 
-    if (method === "PATCH"){
+    if (method === "PATCH") {
         url = `http://localhost:8080/events/${id}`;
     }
-    if (method === "POST"){
+    if (method === "POST") {
         url = `http://localhost:8080/events`;
     }
 
