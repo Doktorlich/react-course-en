@@ -1,12 +1,1 @@
-{
-  "events": [
-    {
-      "title": "A new event",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/M%C3%BCnchen_Panorama.JPG/1024px-M%C3%BCnchen_Panorama.JPG",
-      "date": "2022-10-01",
-      "description": "Some awesome event!",
-      "id": "2a42fcc4-ea21-4bdd-abf6-c40006dc66a9"
-    }
-  ],
-  "users": []
-}
+{"events":[{"title":"1312123123123123","image":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/M%C3%BCnchen_Panorama.JPG/1024px-M%C3%BCnchen_Panorama.JPG","date":"2025-11-26","description":"asdasdasasd","id":"0f236109-ff69-4a5b-8fa5-08ec0ea92338"},{"title":"1111111111111111111111","image":"https://53.fs1.hubspotusercontent-na1.net/hubfs/53/Germany/Blog_images/wissensdatenbank.png","date":"2025-11-26","description":"sdasasasdas","id":"dc1495b6-882d-40a5-aee9-a99dce7461d1"},{"title":"131231212312","image":"https://kartinki.pibig.info/uploads/posts/2024-02/1708716333_kartinki-pibig-info-p-krasivie-kartinki-dlya-dushi-vkontakte-1.jpg","date":"2025-11-26","description":"asdasdasdasdasd","id":"1fbf09a9-b683-43f5-988e-009388f0399f"}],"users":[{"email":"doklich@mail.ru","password":"$2a$12$NUwr7.ihkyS8TSd517a9IOFdZpHDeq3yUe6cM7Q1h6sI1Z2bgpTwG","id":"f1b64503-5677-44de-8a69-4242c728a6fd"}]}
