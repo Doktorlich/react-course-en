@@ -102,7 +102,7 @@ export default function EventDetails() {
         );
     }
 
-    console.log(data, isPending, isError);
+
     return (
         <>
             {isDeleting && (
