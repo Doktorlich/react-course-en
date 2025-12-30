@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/blob": "^2.0.0",
     "better-sqlite3": "^12.5.0",
+    "dotenv": "^17.2.3",
     "next": "^16.1.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",

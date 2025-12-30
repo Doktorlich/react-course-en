@@ -3,6 +3,7 @@ import slugify from "slugify";
 import xss from "xss";
 import fs from "node:fs";
 import { redirect } from "next/navigation";
+import { put } from "@vercel/blob";
 
 const db = sql("meals.db");
 
@@ -20,18 +21,15 @@ export function getMeal(slug) {
 export async function saveMeal(meal) {
     meal.slug = slugify(meal.title, { lower: true });
     meal.instructions = xss(meal.instructions);
+
     const extension = meal.image.name.split(".").pop();
-    const fileName = `${meal.slug}-${Math.random()}.${extension}`;
-    const stream = fs.createWriteStream(`public/images/${fileName}`);
-    const bufferedImage = await meal.image.arrayBuffer();
-    stream.write(Buffer.from(bufferedImage), error => {
-        if (error) {
-            throw new Error("saving image failed.");
-        }
+    const fileName = `${meal.slug}.${extension}`;
+
+    await put(`meals/${fileName}`, meal.image, {
+        access: "public", // Делаем публичным
+        token: process.env.BLOB_READ_WRITE_TOKEN,
     });
-
-    meal.image = `/images/${fileName}`;
-
+    meal.image = `${fileName}`;
     db.prepare(
         `
         INSERT INTO meals
@@ -47,5 +45,4 @@ export async function saveMeal(meal) {
         )
     `,
     ).run(meal);
-
 }

@@ -9,7 +9,7 @@ export default function MealItem({ title, slug, image, summary, creator }) {
             <header>
                 <div className={classes.image}>
                     <Image
-                        src={`${image}`}
+                        src={`https://mguu6lt2pkfx7hlh.public.blob.vercel-storage.com/meals/${image}`}
                         alt={title}
                         fill
                     />

@@ -3,6 +3,18 @@ import Image from "next/image";
 import { getMeal } from "@/lib/meals";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata({ params }) {
+    const { mealSlug } = await params;
+    const meal = getMeal(mealSlug);
+    if (!meal) {
+        notFound();
+    }
+    return {
+        title: meal.title,
+        description: meal.summary,
+    };
+}
+
 export default async function MealDetailsPage({ params }) {
     const { mealSlug } = await params;
     const meal = getMeal(mealSlug);
@@ -15,7 +27,11 @@ export default async function MealDetailsPage({ params }) {
         <>
             <header className={classes.header}>
                 <div className={classes.image}>
-                    <Image src={meal.image} alt={meal.title} fill />
+                    <Image
+                        src={`https://mguu6lt2pkfx7hlh.public.blob.vercel-storage.com/meals/${meal.image}`}
+                        alt={meal.title}
+                        fill
+                    />
                 </div>
                 <div className={classes.headerText}>
                     <h1>{meal.title}</h1>

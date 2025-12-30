@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 .env.production
 .env
+.env*.local
 
 .idea
 *.local
